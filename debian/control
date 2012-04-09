@@ -1,0 +1,13 @@
+Source: python-leela
+Section: net
+Priority: extra
+Maintainer: Juliano Martinez <juliano.martinez@locaweb.com.br>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: https://github.com/ncode/python-leela
+
+Package: python-leela
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Collect and Chart anything
+ Collect and Chart anything
