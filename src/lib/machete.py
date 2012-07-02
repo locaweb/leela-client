@@ -24,6 +24,7 @@ class Acct(object):
         self.server = (server, port)
         self.service = service
         self.data = []
+        self.id = os.uname()[1]
 
     def add(self, name, value):
         self.data.append("%s|%f" % (name, value))
@@ -31,6 +32,6 @@ class Acct(object):
     def send(self):
         sock = socket.socket(type=socket.SOCK_DGRAM)
         sock.connect(self.server)
-        message = "%s|%s||" % (os.uname()[1] ,self.service)
+        message = "%s|%s||" % (self.id, self.service)
         message += "||".join(self.data)
         sock.send(bz2.compress(message, 9))
