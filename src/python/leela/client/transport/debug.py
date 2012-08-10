@@ -1,5 +1,6 @@
-#!/bin/bash
-# Copyright 2012 Juliano Martinez
+#!/usr/bin/python
+# -*- coding: utf-8; -*-
+#
 # All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +14,10 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-#
-# @author: Juliano Martinez
 
-statgrab | awk '/cpu/ {
-    if (!data){
-        data = ""
-    };
-    gsub(/^cpu\./,"",$1);
-    data = $1"|"$3"||"data
-    } END {
-        gsub(/\|\|$/,"",data);
-        print "'$(uname -n)'|cpu||"data
-}' | bzip2 -9 -c | nc -w 2 -u 127.0.0.1 6968
+from leela.client.transport import interface
+
+class DebugTransport(interface.Transport):
+
+    def send_event(self, e):
+        print(" %s" % str(e))

@@ -1,4 +1,4 @@
-Source: python-leela
+Source: leela-client
 Section: net
 Priority: extra
 Maintainer: Juliano Martinez <juliano.martinez@locaweb.com.br>
@@ -6,8 +6,8 @@ Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.8.4
 Homepage: https://github.com/ncode/python-leela
 
-Package: python-leela
+Package: leela-client
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-gevent
-Description: Collect and Chart anything
- Collect and Chart anything
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-gevent, python-psutil (>= 0.4), python-dnspython
+Description: Collects anything, monitors anything and charts anything
+ Collects anything, monitors anything and charts anything
