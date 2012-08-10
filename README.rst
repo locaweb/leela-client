@@ -8,7 +8,7 @@ module.
 Documentation
 =============
 
-* TODO:fixme
+* http://leela.rtfd.org/
 
 API Stability
 =============
