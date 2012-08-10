@@ -27,7 +27,7 @@ class Network(sensor.RateSensor):
         super(Network, self).__init__("network")
 
     def _instrument(self):
-        labels = ("bytes_sent/s", "bytes_recv/s", "pkts_sent/s", "pkts_recv/s")
+        labels = ("bytes_tx/s", "bytes_rx/s", "pkts_tx/s", "pkts_rx/s")
         result = []
         for (k, vs) in psutil.network_io_counters(True).iteritems():
             events = map(lambda (k1,v): sensor.RateSensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
