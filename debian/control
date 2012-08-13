@@ -8,6 +8,6 @@ Homepage: https://github.com/ncode/python-leela
 
 Package: leela-client
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python-gevent, python-psutil (>= 0.4), python-dnspython
+Depends: ${shlibs:Depends}, ${misc:Depends}, python-psutil (>= 0.4), python-dnspython
 Description: Collects anything, monitors anything and charts anything
  Collects anything, monitors anything and charts anything
