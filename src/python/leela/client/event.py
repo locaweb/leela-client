@@ -59,10 +59,10 @@ class Event(object):
             raise(RuntimeError("name must not be None"))
 
         if (t is None):
-            fmtstr = "%%s: %%.%.df" % precision
+            fmtstr = "%%s: %%.%.df\n" % precision
             return(fmtstr % (n, v))
         else:
-            fmtstr = "%%s: %%.%.df %%d" % precision
+            fmtstr = "%%s: %%.%.df %%d\n" % precision
             return(fmtstr % (n, v, t))
 
     def __str__(self):
