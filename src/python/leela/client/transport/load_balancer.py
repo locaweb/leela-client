@@ -15,9 +15,11 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+from hashlib import md5
+
 def select(e, servers):
-    h = md5.new(e.name).hexdigest()
+    h = md5(e.name()).hexdigest()
     n = long(h, 16)
     l = len(servers)
-    return(server[n % l])
+    return(servers[n % l])
     

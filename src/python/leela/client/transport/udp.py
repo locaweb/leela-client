@@ -30,4 +30,4 @@ class UDPTransport(interface.Transport):
 
     def send_event(self, e):
         addr = load_balancer.select(e, self.l)
-        self.s.sendto(addr, e.serialize())
+        self.s.sendto(e.serialize(), 0, addr)

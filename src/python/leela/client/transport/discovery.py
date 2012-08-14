@@ -17,7 +17,6 @@
 
 import dns.resolver
 import struct
-import md5
 import socket
 from leela.client.transport import udp
 
