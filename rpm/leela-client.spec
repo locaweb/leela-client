@@ -12,7 +12,7 @@ BuildRoot: {{ build_dir }}
 Source0: {{ source }}
 BuildRequires: python2.6
 BuildArch: noarch
-Requires: python2.6-setuptools, python2.6-psutil, python2.6-dns
+Requires: python2.6-setuptools, python2.6-psutil, python2.6-pydns
 
 # Packager Information
 Packager: Bricklayer Builder <bricklayer@locaweb.com.br>
