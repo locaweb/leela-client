@@ -15,9 +15,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+import sys
 from leela.client.transport import interface
 
 class DebugTransport(interface.Transport):
 
     def send_event(self, e):
-        print(" %s" % str(e))
+        print(sys.stdout.write(str(e)))
