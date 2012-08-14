@@ -11,3 +11,4 @@
 
 %:
 	dh $@ 
+	dh --with pydeb --with python2 --namespace leela $@
