@@ -22,7 +22,7 @@ setup(
     author           = "Diego Souza, Juliano Martinez",
     author_email     = "dsouza@c0d3.xxx",
     url              = "http://leela.readthedocs.org",
-    namespaces_packages = ["leela"],
+    namespace_packages = ["leela"],
     # install_requires = ["psutil", "dnspython"],
     packages         = find_packages("src/python"),
     package_dir      = {"": "src/python"},
