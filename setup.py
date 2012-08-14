@@ -21,7 +21,8 @@ setup(
     author           = "Diego Souza, Juliano Martinez",
     author_email     = "dsouza@c0d3.xxx",
     url              = "http://leela.readthedocs.org",
-    install_requires = ["psutil", "dnspython"],
+    namespaces_packages = ["leela"],
+    # install_requires = ["psutil", "dnspython"],
     packages         = find_packages("src/python"),
     package_dir      = {"": "src/python"},
     data_files       = find_datafiles(".", path_f))
