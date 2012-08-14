@@ -22,7 +22,7 @@ from leela.client.transport import interface
 class UDPTransport(interface.Transport):
 
     def __init__(self, servers):
-        self.l = servers
+        self.l = list(sorted(servers))
         self.s = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
     def probe(self):

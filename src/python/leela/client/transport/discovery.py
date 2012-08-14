@@ -26,9 +26,12 @@ factory = { "udp": udp.UDPTransport }
 def resolve(host):
     return(socket.gethostbyname(host))
 
+def address(host, port):
+    return((resolve(host), int(port)))
+
 def discover(srv, proto):
     if (proto != "udp"):
         raise(RuntimeError("only udp for now"))
     rec = "_%s._%s.locaweb.com.br" % (srv, proto)
-    servers = sorted([(resolve(s.target), s.port) for s in dns.resolver.query(srv, "SRV")])
+    servers = [address(s.target, s.port) for s in dns.resolver.query(srv, "SRV")]
     return(factory[proto](servers))

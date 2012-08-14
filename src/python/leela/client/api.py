@@ -16,7 +16,11 @@
 #    limitations under the License.
 
 from leela.client.transport import discovery
+from leela.client.transport import udp
 
-def transport(proto="udp"):
-    return(discovery.discover("leela", proto))
+def udp_transport():
+    return(discovery.discover("leela", "udp"))
 
+def udp_transport_to(servers):
+    srvlist = [discovery.address(h, p) for (h,p) in map(lambda s: s.split(":", 2), servers)]
+    return(udp.UDPTransport(srvlist))
