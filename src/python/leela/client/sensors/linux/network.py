@@ -29,8 +29,15 @@ class Network(sensor.RateSensor):
     def _instrument(self):
         labels = ("bytes_tx/s", "bytes_rx/s", "pkts_tx/s", "pkts_rx/s")
         result = []
+        agg    = {}
         for (k, vs) in psutil.network_io_counters(True).iteritems():
-            events = map(lambda (k1,v): sensor.RateSensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
+            k1 = k.split(":")[0]
+            if (k1 not in agg):
+                agg[k1] = vs
+            else:
+                agg[k1] = map(lambda (a,b): a+b, zip(agg[k1], vs))
+        for (k, vs) in agg.iteritems():
+            events = map(lambda (k1, v): sensor.RateSensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
             result.append(events)
         return(result)
 
