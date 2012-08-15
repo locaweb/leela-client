@@ -12,6 +12,7 @@ BuildRoot: {{ build_dir }}
 Source0: {{ source }}
 BuildRequires: python2.6
 BuildArch: noarch
+Conflicts: python-leela
 Requires: python2.6-setuptools, python2.6-psutil, python2.6-dns
 
 # Packager Information
