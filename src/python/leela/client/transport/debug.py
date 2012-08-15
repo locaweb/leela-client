@@ -21,4 +21,4 @@ from leela.client.transport import interface
 class DebugTransport(interface.Transport):
 
     def send_event(self, e):
-        print(sys.stdout.write(str(e)))
+        sys.stdout.write(str(e))
