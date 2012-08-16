@@ -24,6 +24,69 @@ if (LEELA.backend === undefined) {
 
 LEELA.backend.flotr2 = function (root) {
 
+  var zoom    = undefined;
+  var curdata = undefined;
+  var curopts = undefined;
+
+  var build_options = function(options) {
+    var myopts = { xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
+                            tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], Flotr.defaultTickFormatter),
+                            mode: "time",
+                            timeFormat: "%d %b, %H:%M",
+                            timeUnit: "second",
+                            max: LEELA.f.getprop(options, ["xaxis", "max"]),
+                            min: LEELA.f.getprop(options, ["xaxis", "min"])
+                          },
+                   yaxis: { autoscale: true,
+                            title: LEELA.f.getprop(options, ["yaxis", "title"]),
+                            tickFormatter: LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], Flotr.defaultTickFormatter),
+                            max: LEELA.f.getprop(options, ["yaxis", "max"]),
+                            min: LEELA.f.getprop(options, ["yaxis", "min"])
+                          },
+                   title: options.title,
+                   subtitle: options.subtitle,
+                   selection: { mode: "x"
+                              },
+                   legend: { position: "ne"
+                           },
+                 };
+    if (zoom !== undefined) {
+      myopts.yaxis.min = zoom[0];
+      myopts.xaxis.min = zoom[1];
+      myopts.yaxis.max = zoom[2];
+      myopts.xaxis.max = zoom[3];
+    } else {
+      if (myopts.xaxis.max === undefined)
+        delete myopts.xaxis.max;
+      if (myopts.xaxis.min === undefined)
+        delete myopts.xaxis.min;
+      if (myopts.yaxis.min === undefined)
+        delete myopts.yaxis.min;
+      if (myopts.yaxis.max === undefined)
+        delete myopts.yaxis.max;
+    }
+    return(myopts);
+  };
+
+  var redraw = function () {
+    if (curdata !== undefined && curopts !== undefined)
+      Flotr.draw(root, curdata, build_options(curopts));
+  };
+
+  Flotr.EventAdapter.observe(root, "flotr:select", function (area) {
+    if (area.x2 - area.x1 > 0) {
+      zoom = [area.y1, area.x1, area.y2, area.x2];
+      redraw();
+    }
+  });
+
+  Flotr.EventAdapter.observe(root, "flotr:click", function () {
+    if (zoom !== undefined) {
+      zoom = undefined;
+      redraw();
+    }
+  });
+
   var cspline_i = function (x, xk_1, yk_1, xk, yk, xk1, yk1, xk2, yk2) {
     var t   = (x-xk) / (xk1 - xk);
     var t2  = t*t;
@@ -80,31 +143,13 @@ LEELA.backend.flotr2 = function (root) {
     return(series);
   };
 
-  var build_options = function(options) {
-    var myopts = { xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
-                            tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], Flotr.defaultTickFormatter),
-                            mode: "time",
-                            timeFormat: "%d %b, %H:%M",
-                            timeUnit: "second"
-                          },
-                   yaxis: { autoscale: true,
-                            title: LEELA.f.getprop(options, ["yaxis", "title"]),
-                            tickFormatter: LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], Flotr.defaultTickFormatter)
-                          },
-                   title: options.title,
-                   subtitle: options.subtitle,
-                   selection: { mode: "x"
-                              },
-                   legend: { position: "ne"
-                           },
-                 };
-    return(myopts);
-  };
-
   var render = function (json, options) {
-    var type   = LEELA.f.getprop(options, ["chart", "type"], "spline");
-    var series = (type==="spline" ? format_s(json, chspline, options) : format_s(json, LEELA.f.id, options));
-    Flotr.draw(root, series, build_options(options));
+    var type = LEELA.f.getprop(options, ["chart", "type"], "spline");
+    curdata  = (type==="spline" ? format_s(json, chspline, options) : format_s(json, LEELA.f.id, options));
+    curopts  = options;
+    o_xaxis  = undefined;
+    o_yaxis  = undefined;
+    redraw();
   };
 
   return({"render": render});
