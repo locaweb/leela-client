@@ -66,6 +66,24 @@ LEELA.f = (function () {
     }));
   };
 
+  var min = function (xs) {
+    return(foldl(xs, undefined, function (x, z) {
+      if (z === undefined)
+        return(x);
+      else
+        return(x>z ? z : x);
+    }));
+  };
+
+  var max = function (xs) {
+    return(foldl(xs, undefined, function (x, z) {
+      if (z === undefined)
+        return(x);
+      else
+        return(x>z ? x : z);
+    }));
+  };
+
   var _group = function (resolution, zero, datapoints) {
     var g = [];
     var r = [];
@@ -141,6 +159,11 @@ LEELA.f = (function () {
   };
 
   return({ average: average,
+           min: min,
+           max: max,
+           map: map,
+           snd: snd,
+           fst: fst,
            dot: dot,
            getprop: getprop,
            id: id,

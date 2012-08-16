@@ -35,7 +35,7 @@ LEELA.backend.flotr2 = function (root) {
     var m0  = (yk1-yk)/(2*(xk1 - xk)) + (yk-yk_1)/(2*(xk-xk_1));
     var m1  = (yk2-yk1)/(2*(xk2 - xk1)) + (yk1-yk)/(2*(xk1-xk));
     var y   = h00*yk + h10*(xk1-xk)*m0 + h01*yk1 + h11*(xk1-xk)*m1;
-    return([x, (y<0 ? 0 : y)]);
+    return([x, y]);
   };
 
   var chspline = function (data) {
@@ -43,6 +43,8 @@ LEELA.backend.flotr2 = function (root) {
     var ndata = [];
     var len   = data.length;
     var res   = 25;
+    var min   = LEELA.f.min(LEELA.f.map(data, LEELA.f.snd));
+    var max   = LEELA.f.max(LEELA.f.map(data, LEELA.f.snd));
     
     for (var k=0; k<len-1; k+=1) {
       var x    = data[k][0];
@@ -57,7 +59,8 @@ LEELA.backend.flotr2 = function (root) {
       var s    = (xk1 - xk)/res;
       for (var u=0; u<res; u+=1) {
         x += s;
-        ndata.push(cspline_i(x, xk_1, yk_1, xk, yk, xk1, yk1, xk2, yk2));
+        var xy = cspline_i(x, xk_1, yk_1, xk, yk, xk1, yk1, xk2, yk2);
+        ndata.push([xy[0], (xy[1]>max ? max : (xy[1]<min ? min : xy[1]))]);
       }
     }
 
@@ -69,7 +72,7 @@ LEELA.backend.flotr2 = function (root) {
     for (var k in json.results) {
       if (json.results.hasOwnProperty(k)) {
         series.push({ label: k,
-                      data: fmap(json.results[k].series),
+                      data: fmap(json.results[k].series)
                     });
       }
     }
@@ -78,17 +81,11 @@ LEELA.backend.flotr2 = function (root) {
 
   var build_options = function(options) {
     var myopts = { xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
-                            tickFormatter: function (n) {
-                              var f = LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], LEELA.f.id);
-                              return(n);
-                            },
+                            tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], LEELA.f.id)
                           },
                    yaxis: { autoscale: true,
                             title: LEELA.f.getprop(options, ["yaxis", "title"]),
-                            tickFormatter: function (n) {
-                              var f = LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], LEELA.f.id);
-                              return(f(n));
-                            }
+                            tickFormatter: LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], LEELA.f.id)
                           },
                    title: options.title,
                    subtitle: options.subtitle,
