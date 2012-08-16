@@ -42,7 +42,7 @@ class Memory(sensor.Sensor):
             for l in f.readlines():
                 tmp = l.split()
                 if (len(tmp) > 2 and tmp[0] in tr and tmp[2] == "kB"):
-                    result[tr[tmp[0]]] = long(tmp[1])
+                    result[tr[tmp[0]]] = long(tmp[1])*1024
         free   = sum(map(lambda s: result.get(s,0), ("free", "buffers", "cached")))
         total  = result.get("total", 0)
         wfree  = result.get("swap_free", 0)
