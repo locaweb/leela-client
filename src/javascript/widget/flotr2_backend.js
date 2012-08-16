@@ -67,11 +67,12 @@ LEELA.backend.flotr2 = function (root) {
     return(ndata);
   };
 
-  var format_s = function (json, fmap) {
-    var series = [];
+  var format_s = function (json, fmap, options) {
+    var series   = [];
+    var labelfmt = LEELA.f.getprop(options, ["chart", "labels", "formatter"], LEELA.f.id);
     for (var k in json.results) {
       if (json.results.hasOwnProperty(k)) {
-        series.push({ label: k,
+        series.push({ label: labelfmt(k),
                       data: fmap(json.results[k].series)
                     });
       }
@@ -81,11 +82,14 @@ LEELA.backend.flotr2 = function (root) {
 
   var build_options = function(options) {
     var myopts = { xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
-                            tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], LEELA.f.id)
+                            tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], Flotr.defaultTickFormatter),
+                            mode: "time",
+                            timeFormat: "%d %b, %H:%M",
+                            timeUnit: "second"
                           },
                    yaxis: { autoscale: true,
                             title: LEELA.f.getprop(options, ["yaxis", "title"]),
-                            tickFormatter: LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], LEELA.f.id)
+                            tickFormatter: LEELA.f.getprop(options, ["yaxis", "labels", "formatter"], Flotr.defaultTickFormatter)
                           },
                    title: options.title,
                    subtitle: options.subtitle,
@@ -99,7 +103,7 @@ LEELA.backend.flotr2 = function (root) {
 
   var render = function (json, options) {
     var type   = LEELA.f.getprop(options, ["chart", "type"], "spline");
-    var series = (type==="spline" ? format_s(json, chspline) : format_s(json, LEELA.f.id));
+    var series = (type==="spline" ? format_s(json, chspline, options) : format_s(json, LEELA.f.id, options));
     Flotr.draw(root, series, build_options(options));
   };
 

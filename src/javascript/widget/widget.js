@@ -47,7 +47,7 @@ LEELA.widget = function (root, opts) {
                                   subtitle: options.subtitle || "Powered by locaweb",
                                   chart: options.chart,
                                   yaxis: options.yaxis,
-                                  xaixs: options.xaxis
+                                  xaxis: options.xaxis
                                 });
   };
 

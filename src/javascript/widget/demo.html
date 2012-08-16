@@ -31,9 +31,9 @@
     <span id="uri"></span></br>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
     <script type="text/javascript" src="https://raw.github.com/HumbleSoftware/Flotr2/master/flotr2.min.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/functions.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/flotr2_backend.js"></script>
-    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/widget.js"></script>
+    <script type="text/javascript" src="functions.js"></script>
+    <script type="text/javascript" src="flotr2_backend.js"></script>
+    <script type="text/javascript" src="widget.js"></script>
 
     <script type="text/javascript">
       var qparam = function (name, defval) {
@@ -50,13 +50,13 @@
       var yformat    = qparam("yformat");
       var yformatter = function (n) {
                          if (yformat === "s") {
-                           var tmp = LEELA.f.fmt_bytes(n);
+                           var tmp = LEELA.f.fmt_engeeringscale(n, ["B/s", "KB/s", "MB/s", "GB/s", "TB/s", "PB/s", "EB/s", "ZB/s", "YB/s"]);
                            var num = parseFloat(tmp[0]).toFixed(1);
-                           return(num + tmp[1] + "/s");
+                           return(num +" "+ tmp[1]);
                          } else if (yformat === "b") {
-                           var tmp = LEELA.f.fmt_bytes(n);
+                           var tmp = LEELA.f.fmt_engeeringscale(n, ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]);
                            var num = parseFloat(tmp[0]).toFixed(1);
-                           return(num + tmp[1]);
+                           return(num +" "+ tmp[1]);
                          } else if (yformat === "%") {
                            return((n*100).toFixed(1) + "%");
                          } else {
@@ -65,7 +65,8 @@
                        };
       var widget = LEELA.widget(jQuery("#placeholder"), { yaxis: {labels: {formatter: yformatter},
                                                                  },
-                                                          chart: {type: "spline"}
+                                                          chart: {type: "spline",
+                                                                 }
                                                         });
       if (endpoint !== undefined && key !== undefined) {
         var keys = key.split("\r\n");

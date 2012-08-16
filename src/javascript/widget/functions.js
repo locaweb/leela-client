@@ -130,13 +130,12 @@ LEELA.f = (function () {
     return(f);
   };
 
-  var fmt_bytes = function (n) {
-    var unit = ["b", "K", "M", "G", "T", "P", "E", "Z", "Y"];
-    while (n>512 && unit.length>1) {
+  var fmt_engeeringscale = function (n, units) {
+    while (n>512 && units.length>1) {
       n = n / 1024.0;
-      unit.shift();
+      units.shift();
     }
-    return([n, unit[0]]);
+    return([n, units[0]]);
   };
 
   var getprop = function (o, path, def) {
@@ -167,7 +166,7 @@ LEELA.f = (function () {
            dot: dot,
            getprop: getprop,
            id: id,
-           fmt_bytes: fmt_bytes
+           fmt_engeeringscale: fmt_engeeringscale
          });
 
 })();
