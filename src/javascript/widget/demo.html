@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>leela widget demo</title>
+    </head>
+    <body>
+    <div id="placeholder" style="width: 100%; height: 250px; margin: 8px auto;"></div>
+    <form name="chart-it" method="get">
+      <label for="endpoint">
+        endpoint: <br />
+        <input id="endpoint" type="text" name="endpoint" style="width: 100%;" />
+      </label><br />
+      <label for="key">
+        keys: <br />
+        <textarea id="key" type="text" name="key" rows="10" style="width: 100%;"></textarea>
+      </label><br />
+      <label>
+        format: <br />
+      <input type="radio" name="yformat" value="s">b/s</input>
+      <input type="radio" name="yformat" value="%">%</input>
+      <input type="radio" name="yformat" value="b">bytes</input>
+      <input type="radio" name="yformat" value="r">raw</input>
+      </label><br />
+      <label for="resolution">
+        resolution (minutes): </br>
+        <input id="resolution" type="text" name="resolution" value="12" />
+      </label>
+      <input type="submit" />
+    </form>
+    <span id="uri"></span></br>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/HumbleSoftware/Flotr2/master/flotr2.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/functions.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/flotr2_backend.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/locaweb/leela-client/master/src/javascript/widget/widget.js"></script>
+
+    <script type="text/javascript">
+      var qparam = function (name, defval) {
+        var r = new RegExp("[\\?&]"+ name + "=([^#&]*)");
+        var m = r.exec(window.location.search);
+        if(m === null)
+          return(defval);
+        else
+          return(decodeURIComponent(m[1].replace(/\+/g, " ")));
+      };
+      var endpoint   = qparam("endpoint");
+      var key        = qparam("key");
+      var res        = parseInt(qparam("resolution"));
+      var yformat    = qparam("yformat");
+      var yformatter = function (n) {
+                         if (yformat === "s") {
+                           var tmp = LEELA.f.fmt_bytes(n);
+                           var num = parseFloat(tmp[0]).toFixed(1);
+                           return(num + tmp[1] + "/s");
+                         } else if (yformat === "b") {
+                           var tmp = LEELA.f.fmt_bytes(n);
+                           var num = parseFloat(tmp[0]).toFixed(1);
+                           return(num + tmp[1]);
+                         } else if (yformat === "%") {
+                           return((n*100).toFixed(1) + "%");
+                         } else {
+                           return(n);
+                         }
+                       };
+      var widget = LEELA.widget(jQuery("#placeholder"), { yaxis: {labels: {formatter: yformatter},
+                                                                 },
+                                                          chart: {type: "spline"}
+                                                        });
+      if (endpoint !== undefined && key !== undefined) {
+        var keys = key.split("\r\n");
+        jQuery("#endpoint").val(endpoint);
+        jQuery("#key").val(key);
+        jQuery("#resolution").val(res);
+        jQuery("input:radio[name=yformat]").each(function () {
+          if (this.value === yformat)
+            this.checked = true;
+        });
+        for (var k=0; k<keys.length; k+=1) {
+          var uri = endpoint + "/v1/past24/" + encodeURIComponent(keys[k]);
+          jQuery.ajax(uri, { dataType: "jsonp",
+                             success: widget.render
+                           });
+        }
+      }
+    </script>
+    </body>
+</html>
