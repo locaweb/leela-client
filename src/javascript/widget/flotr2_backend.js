@@ -147,8 +147,7 @@ LEELA.backend.flotr2 = function (root) {
     var type = LEELA.f.getprop(options, ["chart", "type"], "spline");
     curdata  = (type==="spline" ? format_s(json, chspline, options) : format_s(json, LEELA.f.id, options));
     curopts  = options;
-    o_xaxis  = undefined;
-    o_yaxis  = undefined;
+    zoom     = undefined;
     redraw();
   };
 
