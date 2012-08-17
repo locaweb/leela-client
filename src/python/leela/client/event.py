@@ -46,9 +46,11 @@ class Event(object):
 
     def add_prefix(self, p):
         self.n = p + self.n
+        return(self)
 
     def set_name(self, n):
         self.n = n
+        return(self)
 
     def timestamp(self, t):
         self.t = t
