@@ -26,13 +26,13 @@ class Disks(sensor.RateSensor):
     def __init__(self):
         super(Disks, self).__init__("disks")
 
+    def measure(self):
+        return(self.compute(self._instrument()))
+
     def _instrument(self):
         labels = ("read_count/s", "write_count/s")
         result = []
         for (k, vs) in psutil.disk_io_counters(True).iteritems():
-            events = map(lambda (k1,v): sensor.RateSensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
+            events = map(lambda (k1,v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
             result.append(events)
         return(result)
-
-if (__name__ == "__main__"):
-    sensor.debug(Disks())

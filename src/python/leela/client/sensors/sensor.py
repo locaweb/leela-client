@@ -27,13 +27,26 @@ def debug(s):
 
 class Sensor(object):
 
+    class Value(object):
+
+        def __init__(self, label, value):
+            self.label = label
+            self.value = value
+
     def __init__(self, name):
         self.name = name
 
     def mkevent(self, name, *args, **kwargs):
         return(event.Event("%s.%s" % (self.name,name), *args, **kwargs))
 
-    def measure(self):
+    def compute(self, nstate):
+        """
+        Must receive a dict with the following format:
+        key: [v0, v1, ..., vN],
+
+        where key: string
+              v_n: Sensor.Value
+        """
         raise(RuntimeError("abstract event"))
 
 class PercentileSensor(Sensor):
@@ -42,21 +55,14 @@ class PercentileSensor(Sensor):
       * (current_value - past_value) / (current_total - past_total)
     """
 
-    class Value(object):
-
-        def __init__(self, label, value):
-            self.label = label
-            self.value = value
-
     def __init__(self, name):
         super(PercentileSensor, self).__init__(name)
         self.state = None
 
-    def measure(self):
+    def compute(self, nstate):
         if (self.state is None):
-            self.state = self._instrument()
+            self.state = nstate
             return([])
-        nstate = self._instrument()
         result = []
         for k in range(len(nstate)):
             lbs = map(lambda x: x.label, nstate[k])
@@ -67,16 +73,8 @@ class PercentileSensor(Sensor):
         self.state = nstate
         return(result)
 
-    def _instrument(self):
-        """
-        Must return a dict with the following format:
-        key: [v0, v1, ..., vN],
-
-        where key: string
-              v_n: RelativeSensor.Value
-        """
-        raise(RuntimeError("abstract event"))
-
+# TODO: counter resets
+# TODO: counter wraps
 class RateSensor(Sensor):
     """
     Computes the rate in seconds, as follows:
@@ -86,22 +84,15 @@ class RateSensor(Sensor):
     no previous state. Make sure you execute this multiples times
     giving it a reasonable interval between each call.
     """
-    
-    class Value(object):
-
-        def __init__(self, label, value):
-            self.label = label
-            self.value = value
 
     def __init__(self, name):
         super(RateSensor, self).__init__(name)
         self.state = None
 
-    def measure(self):
+    def compute(self, nstate):
         if (self.state is None):
-            self.state = (self._instrument(), time.time())
+            self.state = (nstate, time.time())
             return([])
-        nstate = self._instrument()
         ntime  = time.time()
         result = []
         for k in range(len(nstate)):
@@ -114,13 +105,3 @@ class RateSensor(Sensor):
             result.extend(map(f.uncurry(self.mkevent), zip(lbs, values)))
         self.state = (nstate, ntime)
         return(result)
-
-    def _instrument(self):
-        """
-        Must return a dict with the following format:
-        key: [v0, v1, ..., vN],
-
-        where key: string
-              v_n: RateSensor.Value
-        """
-        raise(RuntimeError("abstract event"))

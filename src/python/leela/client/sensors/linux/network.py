@@ -26,6 +26,9 @@ class Network(sensor.RateSensor):
     def __init__(self):
         super(Network, self).__init__("network")
 
+    def measure(self):
+        return(self.compute(self._instrument()))
+
     def _instrument(self):
         labels = ("bytes_tx/s", "bytes_rx/s", "pkts_tx/s", "pkts_rx/s")
         result = []
@@ -37,9 +40,6 @@ class Network(sensor.RateSensor):
             else:
                 agg[k1] = map(lambda (a,b): a+b, zip(agg[k1], vs))
         for (k, vs) in agg.iteritems():
-            events = map(lambda (k1, v): sensor.RateSensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
+            events = map(lambda (k1, v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
             result.append(events)
         return(result)
-
-if (__name__ == "__main__"):
-    sensor.debug(Network())

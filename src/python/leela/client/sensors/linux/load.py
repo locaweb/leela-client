@@ -17,18 +17,12 @@
 
 import os
 from leela.client import event
-from leela.client.sensors import sensor
 
-class Load(sensor.Sensor):
-
-    def __init__(self):
-        super(Load, self).__init__("loadavg")
+class Load(object):
 
     def measure(self):
         (l1, l5, l15) = os.getloadavg()
-        return([self.mkevent("1", l1),
-                self.mkevent("5", l5),
-                self.mkevent("15", l15)])
-
-if (__name__ == "__main__"):
-    sensor.debug(Load())
+        return([event.Event("loadavg.1", l1),
+                event.Event("loadavg.5", l5),
+                event.Event("loadavg.15", l15)
+               ])

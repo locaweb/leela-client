@@ -19,23 +19,17 @@ import math
 import time
 import psutil
 from leela.client import event
-from leela.client.sensors import sensor
 
-class DiskUsage(sensor.Sensor):
-
-    def __init__(self):
-        super(DiskUsage, self).__init__("du")
+class DiskUsage(object):
 
     def measure(self):
         result = []
         for d in psutil.disk_partitions():
             k    = d.mountpoint
             data = psutil.disk_usage(k)
-            events = [ self.mkevent("%s.total" % (k,), data.total),
-                       self.mkevent("%s.used" % (k,), data.used),
-                       self.mkevent("%s.free" % (k,), data.free)]
+            events = [ event.Event("du.%s.total" % (k,), data.total),
+                       event.Event("du.%s.used" % (k,), data.used),
+                       event.Event("du.%s.free" % (k,), data.free)
+                     ]
             result.extend(events)
         return(result)
-
-if (__name__ == "__main__"):
-    sensor.debug(DiskUsage())

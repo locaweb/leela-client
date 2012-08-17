@@ -24,6 +24,9 @@ class Cpu(sensor.PercentileSensor):
     def __init__(self):
         super(Cpu, self).__init__("cpu")
 
+    def measure(self):
+        return(self.compute(self._instrument()))
+
     def _instrument(self):
         labels = ("user", "nice", "system", "idle", "iowait", "irq", "soft_irq", "steal", "guest")
         data = []
@@ -33,9 +36,7 @@ class Cpu(sensor.PercentileSensor):
                     tmp = l.split()
                     k   = tmp[0]
                     values = map(long, tmp[1:])
-                    events = map(lambda (k1,v): sensor.PercentileSensor.Value("%s.%s" % (k,k1), v), zip(labels, values))
+                    events = map(lambda (k1,v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, values))
+
                     data.append(events)
         return(data)
-
-if (__name__ == "__main__"):
-    sensor.debug(Cpu())

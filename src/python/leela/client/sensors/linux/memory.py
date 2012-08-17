@@ -18,16 +18,12 @@
 import math
 import time
 from leela.client import event
-from leela.client.sensors import sensor
 
-class Memory(sensor.Sensor):
-
-    def __init__(self):
-        super(Memory, self).__init__("memory")
+class Memory(object):
 
     def measure(self):
         values = self._snapshot()
-        return([self.mkevent(k, v) for (k,v) in values.iteritems()])
+        return([event.Event("memory.%s" % k, v) for (k,v) in values.iteritems()])
 
     def _snapshot(self):
         tr = {"MemTotal:": "total",
@@ -50,6 +46,3 @@ class Memory(sensor.Sensor):
         result["used"]      = max(0, total - free)
         result["swap_used"] = max(0, wtotal - wfree)
         return(result)
-
-if (__name__ == "__main__"):
-    sensor.debug(Memory())
