@@ -41,8 +41,8 @@ class Event(object):
     def name(self):
         return(self.n)
 
-    def value(self, v):
-        self.v = v
+    def value(self):
+        return(self.v)
 
     def add_prefix(self, p):
         self.n = p + self.n
@@ -73,3 +73,11 @@ class Event(object):
 
     def __unicode__(self):
         return(self.serialize())
+
+    def __hash__(self):
+        return(hash(self.n))
+
+    def __cmp__(self, o):
+        if (self.n == o.n):
+            return(cmp(self.t, o.t))
+        return(cmp(self.n, o.n))

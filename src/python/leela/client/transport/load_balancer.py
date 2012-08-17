@@ -16,21 +16,22 @@
 #    limitations under the License.
 
 def select(e, servers):
-    h = hash(e.name())
+    h = hash(e)
     l = len(servers)
     return(servers[h % l])
 
-def group(es, servers, maxsize=512):
+def group(es, servers, f_len, maxsize=512):
     result = {}
     cursz  = 0
     for e in es:
-        l = len(e.serialize())
+        l = f_len(e)
         k = select(e, servers)
         if (k not in result):
             result[k] = [[]]
         if ((cursz+l) >= maxsize):
             cursz = 0
-            result[k].insert(0, [])
+            if (len(result[k][-1]) > 0):
+                result[k].append([])
         cursz += l
-        result[k][0].append(e)
+        result[k][-1].append(e)
     return(result)

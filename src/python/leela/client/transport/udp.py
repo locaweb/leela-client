@@ -30,7 +30,8 @@ class UDPTransport(interface.Transport):
         pass
 
     def send(self, es):
-        g = load_balancer.group(es, self.l)
+        f = lambda e: len(e.serialize())
+        g = load_balancer.group(es, self.l, f)
         for (addr, ess) in g.iteritems():
             for es in ess:
                 self.s.sendto(event.serialize_list(es), 0, addr)
