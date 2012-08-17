@@ -54,7 +54,7 @@ LEELA.backend.flotr2 = function (root) {
                    selection: { mode: "x",
                                 fps: 30
                               },
-                   legend: { position: "ne"
+                   legend: { position: "nw"
                            },
                  };
     if (zoom !== undefined) {
