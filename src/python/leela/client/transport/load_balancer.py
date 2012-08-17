@@ -27,7 +27,7 @@ def group(es, servers, maxsize=512):
         l = len(e.serialize())
         k = select(e, servers)
         if (k not in result):
-            result[k] = []
+            result[k] = [[]]
         if ((cursz+l) > maxsize):
             cursz = 0
             result[k].insert(0, [])
