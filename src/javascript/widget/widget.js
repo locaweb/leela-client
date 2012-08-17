@@ -1,3 +1,5 @@
+/*jslint continue: true, vars: true, indent: 2*/
+
 // All Rights Reserved.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,16 +15,18 @@
 //    limitations under the License.
 
 var LEELA;
+var jQuery;
 
 if (LEELA === undefined) {
   LEELA = {};
 }
 
-if (LEELA.backend == undefined) {
+if (LEELA.backend === undefined) {
   LEELA.backend = {};
 }
 
 LEELA.widget = function (root, opts) {
+  "use strict";
 
   var options   = opts || {};
   var backend_f = (options.backend || LEELA.backend.flotr2 || LEELA.backend.hicharts);
@@ -32,13 +36,16 @@ LEELA.widget = function (root, opts) {
   var merge = function (items) {
     var l = items.length;
     var r = {};
-    for (var i=0; i<l; i+=1) {
-      for (var k in items[i].results) {
-        if (items[i].results.hasOwnProperty(k))
+    var i;
+    var k;
+    for (i = 0; i < l; i += 1) {
+      for (k in items[i].results) {
+        if (items[i].results.hasOwnProperty(k)) {
           r[k] = items[i].results[k];
+        }
       }
     }
-    return({results: r});
+    return ({results: r});
   };
 
   var render = function (json) {
@@ -51,5 +58,5 @@ LEELA.widget = function (root, opts) {
                                 });
   };
 
-  return({"render": render});
-}
+  return ({"render": render});
+};

@@ -1,3 +1,5 @@
+/*jslint continue: true, vars: true, indent: 2*/
+
 // All Rights Reserved.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,91 +21,91 @@ if (LEELA === undefined) {
 }
 
 LEELA.f = (function () {
+  "use strict";
 
   var fst = function (xs) {
-    return(xs[0]);
+    return (xs[0]);
   };
 
   var snd = function (xs) {
-    return(xs[1]);
+    return (xs[1]);
   };
 
-  var datapoint_timestamp = fst;
-
-  var datapoint_value = snd;
-
   var foldl = function (xs, z, f) {
-    for (var k in xs) {
-      if (xs.hasOwnProperty(k))
+    var k;
+    for (k in xs) {
+      if (xs.hasOwnProperty(k)) {
         z = f(xs[k], z);
+      }
     }
-    return(z);
+    return (z);
   };
 
   var id = function (x) {
-    return(x);
+    return (x);
   };
 
   var cons = function (x, xs) {
     xs.push(x);
-    return(xs);
+    return (xs);
   };
 
   var snoc = function (x, xs) {
     xs.unshift(x);
-    return(xs);
+    return (xs);
   };
 
   var map = function (xs, f) {
-    return(foldl(xs, [], function (x, z) {
-      return(snoc(f(x), z));
+    return (foldl(xs, [], function (x, z) {
+      return (snoc(f(x), z));
     }));
   };
 
   var sum = function (xs) {
-    return(foldl(xs, 0, function (x, z) {
-      return(x + z);
+    return (foldl(xs, 0, function (x, z) {
+      return (x + z);
     }));
   };
 
   var min = function (xs) {
-    return(foldl(xs, undefined, function (x, z) {
-      if (z === undefined)
-        return(x);
-      else
-        return(x>z ? z : x);
+    return (foldl(xs, undefined, function (x, z) {
+      if (z === undefined) {
+        return (x);
+      }
+      return (x > z ? z : x);
     }));
   };
 
   var max = function (xs) {
-    return(foldl(xs, undefined, function (x, z) {
-      if (z === undefined)
-        return(x);
-      else
-        return(x>z ? x : z);
+    return (foldl(xs, undefined, function (x, z) {
+      if (z === undefined) {
+        return (x);
+      }
+      return (x > z ? x : z);
     }));
   };
 
-  var _group = function (resolution, zero, datapoints) {
+  var group = function (resolution, zero, datapoints) {
     var g = [];
     var r = [];
-    var z = undefined;
     var s = 60;
+    var z;
 
     var process = function (d) {
       g.push(d);
-      if (g.length == resolution) {
-        r.push([datapoint_timestamp(g[0]), (sum(map(g, snd)) / resolution)]);
+      if (g.length === resolution) {
+        r.push([fst(g[0]), (sum(map(g, snd)) / resolution)]);
         g = [];
       }
-      return(g);
+      return (g);
     };
 
-    for (var k in datapoints) {
+    var k;
+    for (k in datapoints) {
       if (datapoints.hasOwnProperty(k)) {
         var d = datapoints[k];
-        var t = datapoint_timestamp(d);
-        var v = datapoint_value(d);
+        var t = fst(d);
+        var v = snd(d);
         z = (z === undefined ? t : z + s);
         while (z !== t) {
           process([z, zero]);
@@ -112,61 +114,65 @@ LEELA.f = (function () {
         process([t, v]);
       }
     }
-    if (g.length > 0)
-      r.push([datapoint_timestamp(g[0]), (sum(map(g, snd)) / resolution)]);
+    if (g.length > 0) {
+      r.push([fst(g[0]), (sum(map(g, snd)) / resolution)]);
+    }
 
-    return(r);
+    return (r);
   };
 
   var average = function (resolution, zero) {
     var f = function (json) {
-      for (var m in json.results) {
+      var m;
+      for (m in json.results) {
         if (json.results.hasOwnProperty(m)) {
-          json.results[m].series = _group(resolution, zero, json.results[m].series);
+          json.results[m].series = group(resolution, zero, json.results[m].series);
         }
       }
-      return(json);
+      return (json);
     };
-    return(f);
+    return (f);
   };
 
   var fmt_engeeringscale = function (n, units) {
-    while (n>512 && units.length>1) {
+    while (n > 512 && units.length > 1) {
       n = n / 1024.0;
       units.shift();
     }
-    return([n, units[0]]);
+    return ([n, units[0]]);
   };
 
   var getprop = function (o, path, def) {
     var tmp = o;
-    for (var k=0; k<path.length; k+=1) {
-      if (tmp!==undefined && tmp.hasOwnProperty(path[k]))
+    var k;
+    for (k = 0; k < path.length; k += 1) {
+      if (tmp !== undefined && tmp.hasOwnProperty(path[k])) {
         tmp = tmp[path[k]];
-      else
-        return(def);
+      } else {
+        return (def);
+      }
     }
-    return(tmp);
+    return (tmp);
   };
 
   var dot = function (f, g) {
     var h = function () {
       var to_a = Array.prototype.slice;
-      return(f(g.apply(null, to_a.call(arguments))));
+      return (f(g.apply(null, to_a.call(arguments))));
     };
-    return(h);
+    return (h);
   };
 
-  return({ average: average,
-           min: min,
-           max: max,
-           map: map,
-           snd: snd,
-           fst: fst,
-           dot: dot,
-           getprop: getprop,
-           id: id,
-           fmt_engeeringscale: fmt_engeeringscale
-         });
+  return ({ average: average,
+            min: min,
+            max: max,
+            map: map,
+            snd: snd,
+            fst: fst,
+            dot: dot,
+            getprop: getprop,
+            id: id,
+            fmt_engeeringscale: fmt_engeeringscale
+          });
 
-})();
+}());

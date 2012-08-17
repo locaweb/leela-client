@@ -1,3 +1,5 @@
+/*jslint continue: true, vars: true, indent: 2*/
+
 // All Rights Reserved.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,6 +15,8 @@
 //    limitations under the License.
 //
 // DO NOT EDIT, AUTOMATICALLY GENERATED
+
+var LEELA;
 
 if (LEELA === undefined) {
   LEELA = {};

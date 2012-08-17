@@ -82,6 +82,8 @@ EOF
 write_jsversion() {
   echo " creating file: $1"
   cat <<EOF >"$1"
+/*jslint continue: true, vars: true, indent: 2*/
+
 // All Rights Reserved.
 //
 //    Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,6 +99,8 @@ write_jsversion() {
 //    limitations under the License.
 //
 // DO NOT EDIT, AUTOMATICALLY GENERATED
+
+var LEELA;
 
 if (LEELA === undefined) {
   LEELA = {};
