@@ -28,7 +28,7 @@ def group(es, servers, maxsize=512):
         k = select(e, servers)
         if (k not in result):
             result[k] = [[]]
-        if ((cursz+l) > maxsize):
+        if ((cursz+l) >= maxsize):
             cursz = 0
             result[k].insert(0, [])
         cursz += l
