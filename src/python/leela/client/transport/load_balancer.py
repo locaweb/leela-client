@@ -20,8 +20,17 @@ def select(e, servers):
     l = len(servers)
     return(servers[h % l])
 
-def group(es, servers):
+def group(es, servers, maxsize=512):
     result = {}
+    cursz  = 0
     for e in es:
-        result[select(e,server)] = e
+        l = len(e.serialize())
+        k = select(e, servers)
+        if (k not in result):
+            result[k] = []
+        if ((cursz+l) > maxsize):
+            cursz = 0
+            result[k].insert(0, [])
+        cursz += l
+        result[k][0].append(e)
     return(result)
