@@ -15,8 +15,12 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+import math
+
 def derive(zero=0.0, minimum=0.0):
     def f(y1, y0, x1, x0):
+        if (math.isnan(y0)):
+            return(y1/float(x1))
         dx = float(x1 - x0)
         if (dx == 0.0):
             return(zero)
