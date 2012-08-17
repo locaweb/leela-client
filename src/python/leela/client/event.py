@@ -20,6 +20,9 @@ import time
 SRV_TIMESTAMP = -1
 CUR_TIMESTAMP = -2
 
+def serialize_list(events):
+    return("".join(map(lambda e: e.serialize(), events)))
+
 class Event(object):
     """
     Raw event.

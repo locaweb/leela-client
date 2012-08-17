@@ -15,13 +15,17 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-def select(e, servers):
-    h = hash(e.name())
-    l = len(servers)
-    return(servers[h % l])
+from leela.client.transport import interface
 
-def group(es, servers):
-    result = {}
-    for e in es:
-        result[select(e,server)] = e
-    return(result)
+class MemoryTransport(interface.Transport):
+
+    def __init__(self):
+        self.events = []
+
+    def send_event(self, e):
+        self.events.append(e)
+
+    def flush(self):
+        r = self.events
+        self.events = []
+        return(r)

@@ -16,6 +16,7 @@
 #    limitations under the License.
 
 import socket
+from leela.client import event
 from leela.client.transport import load_balancer
 from leela.client.transport import interface
 
@@ -27,6 +28,11 @@ class UDPTransport(interface.Transport):
 
     def probe(self):
         pass
+
+    def send(self, es):
+        g = load_balancer.group(es, self.l)
+        for (addr, es) in g.iteritems():
+            self.s.sendto(event.serialize_list(es), 0, addr)
 
     def send_event(self, e):
         addr = load_balancer.select(e, self.l)
