@@ -55,7 +55,7 @@ class Event(object):
     def timestamp(self, t):
         self.t = t
 
-    def serialize(self, precision=24):
+    def serialize(self, precision=15):
         n = self.n
         v = float(self.v)
         t = self.t
@@ -64,10 +64,10 @@ class Event(object):
             raise(RuntimeError("name must not be None"))
 
         if (t is None):
-            fmtstr = "%%s: %%.%.df\n" % precision
+            fmtstr = "%%s: %%.%.dE\n" % precision
             return(fmtstr % (n, v))
         else:
-            fmtstr = "%%s: %%.%.df %%d\n" % precision
+            fmtstr = "%%s: %%.%.dE %%d\n" % precision
             return(fmtstr % (n, v, t))
 
     def __str__(self):
