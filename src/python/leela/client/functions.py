@@ -41,6 +41,3 @@ def percentage(state1, state0):
     xs1 = sum(state1)
     xs0 = sum(state0)
     return(map(lambda (y1,y0): derive()(y1, y0, xs1, xs0), zip(state1, state0)))
-
-def differentiate(state1, time1, state0, time0):
-    return(map(lambda (y1,y0): derive()(y1, y0, time1, time0), zip(state1, state0)))

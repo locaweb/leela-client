@@ -41,10 +41,10 @@ def test_rate_sensor_computes_rates_correctly():
     z = random.randint(0, 100)
     y = z + random.randint(0, 100)
 
-    s.compute([[RateSensor.Value("foo", z)]])
+    s.compute([RateSensor.Value("foo", z)])
     time.sleep(0.1)
     t0      = s.state[1]
-    events  = s.compute([[RateSensor.Value("foo", y)]])
+    events  = s.compute([RateSensor.Value("foo", y)])
     t1      = s.state[1]
     results = {"test.foo": (y-z)/(t1-t0)}
     for e in events:

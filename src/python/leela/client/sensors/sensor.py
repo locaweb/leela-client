@@ -96,12 +96,12 @@ class RateSensor(Sensor):
         ntime  = time.time()
         result = []
         for k in range(len(nstate)):
-            lbs = map(lambda x: x.label, nstate[k])
-            vs1 = map(lambda x: x.value, nstate[k])
-            vs0 = map(lambda x: x.value, self.state[0][k])
-            xs1 = ntime
-            xs0 = self.state[1]
-            values = f.differentiate(vs1, xs1, vs0, xs0)
-            result.extend(map(f.uncurry(self.mkevent), zip(lbs, values)))
+            lb = nstate[k].label
+            v1 = nstate[k].value
+            v0 = self.state[0][k].value
+            x1 = ntime
+            x0 = self.state[1]
+            ev = self.mkevent(lb, f.derive()(v1, v0, x1, x0))
+            result.append(ev)
         self.state = (nstate, ntime)
         return(result)

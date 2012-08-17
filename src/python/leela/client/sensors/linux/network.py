@@ -41,5 +41,5 @@ class Network(sensor.RateSensor):
                 agg[k1] = map(lambda (a,b): a+b, zip(agg[k1], vs))
         for (k, vs) in agg.iteritems():
             events = map(lambda (k1, v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
-            result.append(events)
+            result.extend(events)
         return(result)

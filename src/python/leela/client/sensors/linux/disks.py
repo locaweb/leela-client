@@ -34,5 +34,5 @@ class Disks(sensor.RateSensor):
         result = []
         for (k, vs) in psutil.disk_io_counters(True).iteritems():
             events = map(lambda (k1,v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, vs))
-            result.append(events)
+            result.extend(events)
         return(result)
