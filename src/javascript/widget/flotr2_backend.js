@@ -170,7 +170,7 @@ LEELA.backend.flotr2 = function (root) {
     var k;
     for (k in json.results) {
       if (json.results.hasOwnProperty(k)) {
-        series.push({ label: labelfmt(k),
+        series.push({ label: results[k].label || labelfmt(k),
                       data: fmap(json.results[k].series)
                     });
       }
