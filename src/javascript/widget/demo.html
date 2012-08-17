@@ -80,7 +80,7 @@
         for (var k=0; k<keys.length; k+=1) {
           var uri = endpoint + "/v1/past24/" + encodeURIComponent(keys[k]);
           jQuery.ajax(uri, { dataType: "jsonp",
-                             success: widget.render
+                             success: LEELA.f.dot(widget.render, LEELA.f.average(res))
                            });
         }
       }
