@@ -119,6 +119,10 @@ LEELA.backend.flotr2 = function (root) {
   });
 
   var cspline_i = function (x, xk_1, yk_1, xk, yk, xk1, yk1, xk2, yk2) {
+    // http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Finite_difference
+    var m0  = (yk1 - yk) / (2 * (xk1 - xk)) + (yk - yk_1) / (2 * (xk - xk_1));
+    var m1  = (yk2 - yk1) / (2 * (xk2 - xk1)) + (yk1 - yk) / (2 * (xk1 - xk));
+    // http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Interpolation_on_.28xk.2C_xk.2B1.29
     var t   = (x - xk) / (xk1 - xk);
     var t2  = t * t;
     var t3  = t2 * t;
@@ -126,8 +130,6 @@ LEELA.backend.flotr2 = function (root) {
     var h10 = t3 - 2 * t2 + t;
     var h01 = 3 * t2 - (2 * t3);
     var h11 = t3 - t2;
-    var m0  = (yk1 - yk) / (2 * (xk1 - xk)) + (yk - yk_1) / (2 * (xk - xk_1));
-    var m1  = (yk2 - yk1) / (2 * (xk2 - xk1)) + (yk1 - yk) / (2 * (xk1 - xk));
     var y   = h00 * yk + h10 * (xk1 - xk) * m0 + h01 * yk1 + h11 * (xk1 - xk) * m1;
     return ([x, y]);
   };
