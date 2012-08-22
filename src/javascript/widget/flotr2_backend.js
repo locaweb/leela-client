@@ -55,7 +55,7 @@ LEELA.backend.flotr2 = function (root) {
                                 fps: 30
                               },
                    legend: { position: "nw"
-                           },
+                           }
                  };
     if (zoom !== undefined) {
       myopts.xaxis.min = zoom[0];
