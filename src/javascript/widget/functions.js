@@ -115,7 +115,7 @@ LEELA.f = (function () {
       }
     }
     if (g.length > 0) {
-      r.push([fst(g[0]), (sum(map(g, snd)) / resolution)]);
+      r.push([fst(g[0]), (sum(map(g, snd)) / g.length)]);
     }
 
     return (r);
