@@ -26,12 +26,12 @@ class Memory(object):
         return([event.Event("memory.%s" % k, v) for (k,v) in values.iteritems()])
 
     def _snapshot(self):
-        tr = {"MemTotal:": "total",
-              "MemFree:": "free",
-              "Buffers:": "buffers",
-              "Cached:": "cached",
-              "SwapTotal:": "swap_total",
-              "SwapFree:": "swap_free"
+        tr = {"MemTotal:": "main.total",
+              "MemFree:": "main.free",
+              "Buffers:": "main.buffers",
+              "Cached:": "main.cached",
+              "SwapTotal:": "swap.total",
+              "SwapFree:": "swap.free"
              }
         result = {}
         with file("/proc/meminfo", "r") as f:
@@ -39,10 +39,10 @@ class Memory(object):
                 tmp = l.split()
                 if (len(tmp) > 2 and tmp[0] in tr and tmp[2] == "kB"):
                     result[tr[tmp[0]]] = long(tmp[1])*1024
-        free   = sum(map(lambda s: result.get(s,0), ("free", "buffers", "cached")))
-        total  = result.get("total", 0)
-        wfree  = result.get("swap_free", 0)
-        wtotal = result.get("swap_free", 0)
-        result["used"]      = max(0, total - free)
-        result["swap_used"] = max(0, wtotal - wfree)
+        free   = sum(map(lambda s: result.get(s,0), ("main.free", "main.buffers", "main.cached")))
+        total  = result.get("main.total", 0)
+        wfree  = result.get("swap.free", 0)
+        wtotal = result.get("swap.free", 0)
+        result["main.used"] = max(0, total - free)
+        result["swap.used"] = max(0, wtotal - wfree)
         return(result)
