@@ -15,7 +15,6 @@
 //    limitations under the License.
 
 var LEELA;
-var Flotr;
 
 if (LEELA === undefined) {
   LEELA = {};
