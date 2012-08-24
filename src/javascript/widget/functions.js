@@ -134,7 +134,7 @@ LEELA.f = (function () {
     return (f);
   };
 
-  var fmt_engeeringscale = function (n, units) {
+  var fmt_engineeringscale = function (n, units) {
     while (n > 512 && units.length > 1) {
       n = n / 1024.0;
       units.shift();
@@ -172,7 +172,7 @@ LEELA.f = (function () {
             dot: dot,
             getprop: getprop,
             id: id,
-            fmt_engeeringscale: fmt_engeeringscale
+            fmt_engineeringscale: fmt_engineeringscale
           });
 
 }());
