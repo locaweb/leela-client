@@ -34,13 +34,17 @@ LEELA.backend.flotr2 = function (root) {
   var fsttime = true;
 
   var build_options = function (options) {
-    var myopts = { xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
+    var myopts = { HtmlText : false, // allows labelsAngle
+                   xaxis: { title: LEELA.f.getprop(options, ["xaxis", "title"]),
                             tickFormatter: LEELA.f.getprop(options, ["xaxis", "labels", "formatter"], Flotr.defaultTickFormatter),
                             mode: "time",
                             timeFormat: "%d %b, %H:%M",
+                            timeMode: "local",
                             timeUnit: "second",
                             max: LEELA.f.getprop(options, ["xaxis", "max"]),
-                            min: LEELA.f.getprop(options, ["xaxis", "min"])
+                            min: LEELA.f.getprop(options, ["xaxis", "min"]),
+                            noTicks: 42,
+                            labelsAngle: 45
                           },
                    yaxis: { autoscale: true,
                             title: LEELA.f.getprop(options, ["yaxis", "title"]),
@@ -108,7 +112,7 @@ LEELA.backend.flotr2 = function (root) {
   };
 
   Flotr.EventAdapter.observe(root, "flotr:select", function (area) {
-    if (area.x2 - area.x1 > 0) {
+    if (Math.abs(area.x2 - area.x1) > 60) { // 60: assuming a time series
       zoomin(area.x1, area.y1, area.x2, area.y2);
     }
   });
