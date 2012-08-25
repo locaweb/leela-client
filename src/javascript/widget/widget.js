@@ -25,12 +25,13 @@ if (LEELA.backend === undefined) {
   LEELA.backend = {};
 }
 
-LEELA.widget = function (root, opts) {
+LEELA.widget = function (root0, opts) {
   "use strict";
 
+  var root      = jQuery(root0);
   var options   = opts || {};
   var backend_f = (options.backend || LEELA.backend.flotr2 || LEELA.backend.hicharts);
-  var backend   = backend_f(jQuery(root).get(0));
+  var backend   = backend_f(root.get(0));
   var data      = [];
 
   var merge = function (items) {
@@ -54,7 +55,9 @@ LEELA.widget = function (root, opts) {
                                   subtitle: options.subtitle || "Powered by locaweb",
                                   chart: options.chart,
                                   yaxis: options.yaxis,
-                                  xaxis: options.xaxis
+                                  xaxis: options.xaxis,
+                                  width: options.width || root.width(),
+                                  height: options.height || root.height()
                                 });
   };
 

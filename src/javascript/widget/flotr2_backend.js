@@ -43,7 +43,7 @@ LEELA.backend.flotr2 = function (root) {
                             timeUnit: "second",
                             max: LEELA.f.getprop(options, ["xaxis", "max"]),
                             min: LEELA.f.getprop(options, ["xaxis", "min"]),
-                            noTicks: 42,
+                            noTicks: options.width / 42,
                             labelsAngle: 45
                           },
                    yaxis: { autoscale: true,
