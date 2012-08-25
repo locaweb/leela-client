@@ -174,9 +174,9 @@ LEELA.backend.flotr2 = function (root) {
     var series   = [];
     var deffmt   = function (k, summ) {
                      var tmp = "[";
-                     for (var k in summ) {
-                       if (summ.hasOwnProperty(k)) {
-                         tmp += k +": "+ summ[k].toFixed(1) + ", ";
+                     for (var m in summ) {
+                       if (summ.hasOwnProperty(m)) {
+                         tmp += m +": "+ summ[m].toFixed(1) + ", ";
                        }
                      }
                      return(k + " " + tmp.substr(0, tmp.length-2) + "]");
