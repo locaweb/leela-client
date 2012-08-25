@@ -25,10 +25,9 @@ if (LEELA.backend === undefined) {
   LEELA.backend = {};
 }
 
-LEELA.widget = function (root0, opts) {
+LEELA.widget = function (root, opts) {
   "use strict";
 
-  var root      = jQuery(root0);
   var options   = opts || {};
   var backend_f = (options.backend || LEELA.backend.flotr2 || LEELA.backend.hicharts);
   var backend   = backend_f(root.get(0));
@@ -57,7 +56,8 @@ LEELA.widget = function (root0, opts) {
                                   yaxis: options.yaxis,
                                   xaxis: options.xaxis,
                                   width: options.width || root.width(),
-                                  height: options.height || root.height()
+                                  height: options.height || root.height(),
+                                  legend: options.legend
                                 });
   };
 

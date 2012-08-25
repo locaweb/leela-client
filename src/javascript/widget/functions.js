@@ -85,6 +85,22 @@ LEELA.f = (function () {
     }));
   };
 
+  var mean = function (xs) {
+    var ys = Array.prototype.slice.call(xs);
+    ys.sort();
+    var len = ys.length;
+    var mid = Math.floor(len/2);
+    if (len % 2 == 0) {
+      return((ys[mid-1] + ys[mid]) / 2);
+    } else {
+      return(ys[mid]);
+    }
+  };
+
+  var avg = function (xs) {
+    return(sum(xs) / xs.length);
+  };
+
   var group = function (resolution, zero, datapoints) {
     var g = [];
     var r = [];
@@ -166,6 +182,8 @@ LEELA.f = (function () {
   return ({ average: average,
             min: min,
             max: max,
+            mean: mean,
+            avg: avg,
             map: map,
             snd: snd,
             fst: fst,
