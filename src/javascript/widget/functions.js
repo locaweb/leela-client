@@ -101,17 +101,16 @@ LEELA.f = (function () {
     return(sum(xs) / xs.length);
   };
 
-  var group = function (resolution, zero, datapoints) {
+  var mavg_left = function (samples, datapoints) {
     var g = [];
     var r = [];
-    var s = 60;
     var z;
 
     var process = function (d) {
       g.push(d);
-      if (g.length === resolution) {
-        r.push([fst(g[0]), (sum(map(g, snd)) / resolution)]);
-        g = [];
+      if (g.length === samples) {
+        r.push([fst(g[0]), sum(map(g, snd)) / samples]);
+        g.shift();
       }
       return (g);
     };
@@ -122,27 +121,23 @@ LEELA.f = (function () {
         var d = datapoints[k];
         var t = fst(d);
         var v = snd(d);
-        z = (z === undefined ? t : z + s);
-        while (z !== t) {
-          process([z, zero]);
-          z += s;
-        }
         process([t, v]);
       }
     }
+
     if (g.length > 0) {
-      r.push([fst(g[0]), (sum(map(g, snd)) / g.length)]);
+      r.push([fst(g[0]), sum(map(g, snd)) / g.length]);
     }
 
     return (r);
   };
 
-  var average = function (resolution, zero) {
+  var maverage = function (samples) {
     var f = function (json) {
       var m;
       for (m in json.results) {
         if (json.results.hasOwnProperty(m)) {
-          json.results[m].series = group(resolution, zero, json.results[m].series);
+          json.results[m].series = mavg_left(samples, json.results[m].series);
         }
       }
       return (json);
@@ -179,7 +174,7 @@ LEELA.f = (function () {
     return (h);
   };
 
-  return ({ average: average,
+  return ({ average: maverage,
             min: min,
             max: max,
             mean: mean,
