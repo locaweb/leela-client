@@ -45,10 +45,10 @@ LEELA.f = (function () {
     return (x);
   };
 
-  var cons = function (x, xs) {
-    xs.push(x);
-    return (xs);
-  };
+  // var cons = function (x, xs) {
+  //   xs.push(x);
+  //   return (xs);
+  // };
 
   var snoc = function (x, xs) {
     xs.unshift(x);
@@ -89,28 +89,26 @@ LEELA.f = (function () {
     var ys = Array.prototype.slice.call(xs);
     ys.sort();
     var len = ys.length;
-    var mid = Math.floor(len/2);
-    if (len % 2 == 0) {
-      return((ys[mid-1] + ys[mid]) / 2);
-    } else {
-      return(ys[mid]);
+    var mid = Math.floor(len / 2);
+    if (len % 2 === 0) {
+      return ((ys[mid - 1] + ys[mid]) / 2);
     }
+    return (ys[mid]);
   };
 
   var avg = function (xs) {
-    return(sum(xs) / xs.length);
+    return (sum(xs) / xs.length);
   };
 
-  var mavg_left = function (samples, datapoints) {
+  var group = function (samples, datapoints) {
     var g = [];
     var r = [];
-    var z;
 
     var process = function (d) {
       g.push(d);
       if (g.length === samples) {
-        r.push([fst(g[0]), sum(map(g, snd)) / samples]);
-        g.shift();
+        r.push(Array.prototype.slice.call(g));
+        g = [];
       }
       return (g);
     };
@@ -126,18 +124,21 @@ LEELA.f = (function () {
     }
 
     if (g.length > 0) {
-      r.push([fst(g[0]), sum(map(g, snd)) / g.length]);
+      r.push(g);
     }
 
     return (r);
   };
 
-  var maverage = function (samples) {
+  var summarize = function (g, samples) {
+    var h = function (data) {
+      return ([fst(data[0]), g(map(data, snd))]);
+    };
     var f = function (json) {
       var m;
       for (m in json.results) {
         if (json.results.hasOwnProperty(m)) {
-          json.results[m].series = mavg_left(samples, json.results[m].series);
+          json.results[m].series = map(group(samples, json.results[m].series), h);
         }
       }
       return (json);
@@ -174,7 +175,8 @@ LEELA.f = (function () {
     return (h);
   };
 
-  return ({ average: maverage,
+  return ({ summarize: summarize,
+            average: function (samples) { return (summarize(avg, samples)); },
             min: min,
             max: max,
             mean: mean,

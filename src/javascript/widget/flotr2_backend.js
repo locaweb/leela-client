@@ -143,8 +143,6 @@ LEELA.backend.flotr2 = function (root) {
     var ndata = [];
     var len   = data.length;
     var res   = 25;
-    var min   = LEELA.f.min(LEELA.f.map(data, LEELA.f.snd));
-    var max   = LEELA.f.max(LEELA.f.map(data, LEELA.f.snd));
 
     var k;
     var u;
@@ -163,7 +161,7 @@ LEELA.backend.flotr2 = function (root) {
       for (u = 0; u < res; u += 1) {
         x += s;
         xy = cspline_i(x, xk_1, yk_1, xk, yk, xk1, yk1, xk2, yk2);
-        ndata.push([xy[0], (xy[1] > max ? max : (xy[1] < min ? min : xy[1]))]);
+        ndata.push([xy[0], xy[1]]);
       }
     }
 
@@ -172,24 +170,23 @@ LEELA.backend.flotr2 = function (root) {
 
   var format_s = function (json, fmap, options) {
     var series   = [];
-    var deffmt   = function (k, summ) {
-                     var tmp = "[";
-                     for (var m in summ) {
-                       if (summ.hasOwnProperty(m)) {
-                         tmp += m +": "+ summ[m].toFixed(1) + ", ";
-                       }
-                     }
-                     return(k + " " + tmp.substr(0, tmp.length-2) + "]");
+    var deffmt   = function (k) {
+                     var max  = LEELA.f.max(LEELA.f.map(json.results[k].series, LEELA.f.snd));
+                     var min  = LEELA.f.min(LEELA.f.map(json.results[k].series, LEELA.f.snd));
+                     var mean = LEELA.f.mean(LEELA.f.map(json.results[k].series, LEELA.f.snd));
+                     var avg  = LEELA.f.avg(LEELA.f.map(json.results[k].series, LEELA.f.snd));
+                     var tmp  = "[";
+                     tmp += "max:  "+ max.toFixed(1) + ", ";
+                     tmp += "min:  "+ min.toFixed(1) + ", ";
+                     tmp += "mean: "+ mean.toFixed(1) + ", ";
+                     tmp += "avg:  "+ avg.toFixed(1) + "]";
+                     return(k + " " + tmp);
                    };
     var labelfmt = LEELA.f.getprop(options, ["chart", "labels", "formatter"], deffmt);
     var k;
     for (k in json.results) {
       if (json.results.hasOwnProperty(k)) {
-        var max  = LEELA.f.max(LEELA.f.map(json.results[k].series, LEELA.f.snd));
-        var min  = LEELA.f.min(LEELA.f.map(json.results[k].series, LEELA.f.snd));
-        var mean = LEELA.f.mean(LEELA.f.map(json.results[k].series, LEELA.f.snd));
-        var avg  = LEELA.f.avg(LEELA.f.map(json.results[k].series, LEELA.f.snd));
-        series.push({ label: json.results[k].label || labelfmt(k, {max:max, min:min, avg:avg, mean:mean}),
+        series.push({ label: json.results[k].label || labelfmt(k),
                       data: fmap(json.results[k].series)
                     });
       }
