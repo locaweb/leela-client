@@ -22,3 +22,8 @@ class DebugTransport(interface.Transport):
 
     def send_event(self, e):
         sys.stdout.write(str(e))
+
+class DevNullTransport(interface.Transport):
+
+    def send_event(self, e):
+        pass
