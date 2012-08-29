@@ -26,9 +26,9 @@ class RateLimit(object):
     def __init__(self):
         self.memory = {}
 
-    def set(self, key, ttl):
-        self.memory[key] = (time.time(), ttl)
+    def refresh(self, key):
+        self.memory[key] = time.time()
 
-    def expired(self, key):
-        (at, ttl) = self.memory.get(key, [0,0])
+    def expired(self, key, ttl):
+        at = self.memory.get(key, 0)
         return (time.time() > at+ttl)

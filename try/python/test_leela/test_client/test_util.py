@@ -21,12 +21,12 @@ from leela.client.utils import RateLimit
 
 def test_ratelimit_with_negative_ttls_expires_immediately():
     rl = RateLimit()
-    rl.set("foobar", -1)
-    ok_(rl.expired("foobar"))
+    rl.refresh("foobar")
+    ok_(rl.expired("foobar", -1))
 
 def test_ratelimit_must_expires_according_to_ttl():
     rl = RateLimit()
-    rl.set("foobar", 0.5)
-    ok_(not rl.expired("foobar"))
+    rl.refresh("foobar")
+    ok_(not rl.expired("foobar", 0.5))
     time.sleep(1)
-    ok_(rl.expired("foobar"))
+    ok_(rl.expired("foobar", 0.5))
