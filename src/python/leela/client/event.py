@@ -64,9 +64,9 @@ class Event(object):
             raise(RuntimeError("name must not be None"))
 
         if (t is None):
-            return("%s: %s" % (n, repr(v)))
+            return("%s: %s\n" % (n, repr(v)))
         else:
-            return("%s: %s %d" % (n, repr(v), t))
+            return("%s: %s %d\n" % (n, repr(v), t))
 
     def __str__(self):
         return(unicode(self).encode("utf-8"))
