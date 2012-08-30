@@ -23,7 +23,7 @@ def debug(s):
     s.measure()
     time.sleep(1)
     for e in s.measure():
-        print(e.serialize(precision=2))
+        print(e.serialize())
 
 class Sensor(object):
 
