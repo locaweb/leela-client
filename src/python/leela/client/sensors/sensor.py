@@ -64,7 +64,7 @@ class PercentileSensor(Sensor):
             self.state = nstate
             return([])
         result = []
-        for k in range(len(nstate)):
+        for k in range(min(len(nstate), len(self.state))):
             lbs = map(lambda x: x.label, nstate[k])
             vs1 = map(lambda x: x.value, nstate[k])
             vs0 = map(lambda x: x.value, self.state[k])
@@ -95,7 +95,7 @@ class RateSensor(Sensor):
             return([])
         ntime  = time.time()
         result = []
-        for k in range(len(nstate)):
+        for k in range(min(len(nstate), len(self.state[0]))):
             lb = nstate[k].label
             v1 = nstate[k].value
             v0 = self.state[0][k].value

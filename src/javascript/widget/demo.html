@@ -80,7 +80,7 @@
             this.checked = true;
         });
         for (var k=0; k<keys.length; k+=1) {
-          var uri = endpoint + "/v1/past24/" + encodeURIComponent(keys[k]);
+          var uri = endpoint + "/v1/pastweek/" + encodeURIComponent(keys[k]);
           jQuery.ajax(uri, { dataType: "jsonp",
                              success: (res==0 ? widget.render : LEELA.f.dot(widget.render, LEELA.f.average(res)))
                            });
