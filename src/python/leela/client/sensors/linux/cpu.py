@@ -19,11 +19,14 @@ import time
 from leela.client import event
 from leela.client.sensors import sensor
 
+def default_accept(k):
+    return(k == "cpu")
+
 class Cpu(sensor.PercentileSensor):
 
-    def __init__(self, everything=False):
+    def __init__(self, accept=default_accept):
         super(Cpu, self).__init__("cpu")
-        self.everything = everything
+        self.accept = accept
 
     def measure(self):
         return(self.compute(self._instrument()))
@@ -36,7 +39,7 @@ class Cpu(sensor.PercentileSensor):
                 if (l.startswith("cpu")):
                     tmp = l.split()
                     k   = tmp[0]
-                    if (not self.everything and (k != "cpu")):
+                    if (not self.accept(k)):
                         continue
                     values = map(long, tmp[1:])
                     events = map(lambda (k1,v): sensor.Sensor.Value("%s.%s" % (k,k1), v), zip(labels, values))

@@ -30,7 +30,7 @@ class Network(sensor.RateSensor):
         return(self.compute(self._instrument()))
 
     def _instrument(self):
-        labels = ("bytes_tx/s", "bytes_rx/s", "pkts_tx/s", "pkts_rx/s")
+        labels = ("bytes_tx/s", "bytes_rx/s")
         result = []
         agg    = {}
         for (k, vs) in psutil.network_io_counters(True).iteritems():
