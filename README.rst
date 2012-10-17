@@ -2,8 +2,7 @@
 LEELA
 =====
 
-Collects anything, monitors anything and analyzes anything: client
-module.
+Distributed, real time event processor and monitoring engine.
 
 Documentation
 =============
@@ -13,7 +12,7 @@ Documentation
 API Stability
 =============
 
-* unstable [2]_
+* testing [2]_
 
 .. [2] Possible values:
 
