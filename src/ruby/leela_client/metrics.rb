@@ -14,76 +14,78 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-module Metric
-  attr_reader :type
-  attr_accessor :key
-  attr_accessor :value
-  attr_accessor :timestamp
+module LeelaClient
+  module Metric
+    attr_reader :type
+    attr_accessor :key
+    attr_accessor :value
+    attr_accessor :timestamp
 
-  def serialize
-    size  = @key.size
-    now   = @timestamp.to_f.to_s
-    if (@value.integer?)
-      value = @value.to_f.to_s
-    elsif (@value.nan?)
-      value = "nan"
-    elsif (@value.infinite? == 1)
-      value = "inf"
-    elsif (@value.infinite? == -1)
-      value = "-inf"
-    else
-      value = @value.to_s
+    def serialize
+      size  = @key.size
+      now   = @timestamp.to_f.to_s
+      if (@value.integer?)
+        value = @value.to_f.to_s
+      elsif (@value.nan?)
+        value = "nan"
+      elsif (@value.infinite? == 1)
+        value = "inf"
+      elsif (@value.infinite? == -1)
+        value = "-inf"
+      else
+        value = @value.to_s
+      end
+
+      "#{@type} #{size}|#{@key} #{value} #{now};"
     end
 
-    "#{@type} #{size}|#{@key} #{value} #{now};"
+    def size
+      self.serialize.size
+    end
   end
 
-  def size
-    self.serialize.size
-  end
-end
+  class Gauge
+    include Metric
 
-class Gauge
-  include Metric
+    def initialize(key, value)
+      @type      = "gauge"
+      @key       = key
+      @value     = value
+      @timestamp = Time.now
+    end
 
-  def initialize(key, value)
-    @type      = "gauge"
-    @key       = key
-    @value     = value
-    @timestamp = Time.now
   end
 
-end
+  class Counter
+    include Metric
 
-class Counter
-  include Metric
-
-  def initialize(key, value)
-    @type      = "counter"
-    @key       = key
-    @value     = value
-    @timestamp = Time.now
+    def initialize(key, value)
+      @type      = "counter"
+      @key       = key
+      @value     = value
+      @timestamp = Time.now
+    end
   end
-end
 
-class Derive
-  include Metric
+  class Derive
+    include Metric
 
-  def initialize(key, value)
-    @type      = "derive"
-    @key       = key
-    @value     = value
-    @timestamp = Time.now
+    def initialize(key, value)
+      @type      = "derive"
+      @key       = key
+      @value     = value
+      @timestamp = Time.now
+    end
   end
-end
 
-class Absolute
-  include Metric
+  class Absolute
+    include Metric
 
-  def initialize(key, value)
-    @type      = "absolute"
-    @key       = key
-    @value     = value
-    @timestamp = Time.now
+    def initialize(key, value)
+      @type      = "absolute"
+      @key       = key
+      @value     = value
+      @timestamp = Time.now
+    end
   end
 end

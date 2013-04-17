@@ -18,11 +18,15 @@ require "resolv"
 
 DEFAULT_PORT = 6968
 
-def transport(servers)
-  servers = servers.map do |addr|
-    host, port = addr.split(":", 2)
-    [Resolv.getaddress(host), (port || 6968).to_i]
-  end
+module LeelaClient
+  module Api
+    def transport(servers)
+      servers = servers.map do |addr|
+        host, port = addr.split(":", 2)
+        [Resolv.getaddress(host), (port || 6968).to_i]
+      end
 
-  UDPTransport.new MD5Ring.from_list(servers)
+      UDPTransport.new MD5Ring.from_list(servers)
+    end
+  end
 end

@@ -17,69 +17,69 @@
 require "set"
 require "digest/md5"
 
-class Ring
-
-  def token(key)
-    raise(RuntimeError.new "abstract method")
-  end
-
-  def add_token!(token, value)
-    raise(RuntimeError.new "abstract method")
-  end
-
-  def rm_token!(token)
-    raise(RuntimeError.new "abstract method")
-  end
-
-  def select(token)
-    raise(RuntimeError.new "abstract method")
-  end
-
-  def values
-    raise(RuntimeError.new "abstract method")
-  end
-end
-
-class MD5Ring < Ring
-
-  def self.from_list(values)
-    ring  = MD5Ring.new
-    step  = 2**128 / values.size
-    token = 0
-    Set.new(values).sort.each do |v|
-      ring.add_token!(token, v)
-      token += step
+module LeelaClient
+  class Ring
+    def token(key)
+      raise(RuntimeError.new "abstract method")
     end
 
-    ring
+    def add_token!(token, value)
+      raise(RuntimeError.new "abstract method")
+    end
+
+    def rm_token!(token)
+      raise(RuntimeError.new "abstract method")
+    end
+
+    def select(token)
+      raise(RuntimeError.new "abstract method")
+    end
+
+    def values
+      raise(RuntimeError.new "abstract method")
+    end
   end
 
-  def initialize
-    @ring = {}
-  end
+  class MD5Ring < Ring
+    def self.from_list(values)
+      ring  = MD5Ring.new
+      step  = 2**128 / values.size
+      token = 0
+      Set.new(values).sort.each do |v|
+        ring.add_token!(token, v)
+        token += step
+      end
 
-  def token(key)
-    Digest::MD5.hexdigest(key).to_i(16)
-  end
+      ring
+    end
 
-  def add_token!(token, value)
-    @ring[token] = value
-  end
+    def initialize
+      @ring = {}
+    end
 
-  def rm_token!(token)
-    @ring.delete(token)
-  end
+    def token(key)
+      Digest::MD5.hexdigest(key).to_i(16)
+    end
 
-  def values
-    @ring.values
-  end
+    def add_token!(token, value)
+      @ring[token] = value
+    end
 
-  def select(value)
-    self.select_(self.token(value))
-  end
+    def rm_token!(token)
+      @ring.delete(token)
+    end
 
-  def select_(token)
-    k = @ring.keys.sort.select {|x| x < token}.last
-    @ring[k]
+    def values
+      @ring.values
+    end
+
+    def select(value)
+      self.select_(self.token(value))
+    end
+
+    def select_(token)
+      k = @ring.keys.sort.select {|x| x < token}.last
+      @ring[k]
+    end
   end
 end

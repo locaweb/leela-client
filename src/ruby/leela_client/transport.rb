@@ -14,23 +14,25 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-class UDPTransport
-  MAXPAYLOAD = 1472
+module LeelaClient
+  class UDPTransport
+    MAXPAYLOAD = 1472
 
-  def initialize(ring)
-    @ring = ring
-    @sock = UDPSocket.new
-  end
+    def initialize(ring)
+      @ring = ring
+      @sock = UDPSocket.new
+    end
 
-  def serialize_list(metrics)
-    metrics.map(&:serialize).join("")
-  end
+    def serialize_list(metrics)
+      metrics.map(&:serialize).join("")
+    end
 
-  def send(metrics)
-    group_limit(@ring, metrics, MAXPAYLOAD).each do |addr, mms|
-      mms.each do |ms|
-        sent = @sock.send(serialize_list(ms), 0, addr[0], addr[1])
-        raise if (sent > MAXPAYLOAD)
+    def send(metrics)
+      LoadBalander.group_limit(@ring, metrics, MAXPAYLOAD).each do |addr, mms|
+        mms.each do |ms|
+          sent = @sock.send(serialize_list(ms), 0, addr[0], addr[1])
+          raise if (sent > MAXPAYLOAD)
+        end
       end
     end
   end
