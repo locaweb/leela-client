@@ -15,12 +15,15 @@
 #    limitations under the License.
 
 class UDPTransport
-
   MAXPAYLOAD = 1472
 
   def initialize(ring)
     @ring = ring
     @sock = UDPSocket.new
+  end
+
+  def serialize_list(metrics)
+    metrics.map(&:serialize).join("")
   end
 
   def send(metrics)
@@ -31,5 +34,4 @@ class UDPTransport
       end
     end
   end
-
 end

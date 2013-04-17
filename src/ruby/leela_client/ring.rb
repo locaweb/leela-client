@@ -26,11 +26,11 @@ class Ring
   def add_token!(token, value)
     raise(RuntimeError.new "abstract method")
   end
-  
+
   def rm_token!(token)
     raise(RuntimeError.new "abstract method")
   end
-  
+
   def select(token)
     raise(RuntimeError.new "abstract method")
   end
@@ -38,7 +38,6 @@ class Ring
   def values
     raise(RuntimeError.new "abstract method")
   end
-
 end
 
 class MD5Ring < Ring
@@ -51,7 +50,8 @@ class MD5Ring < Ring
       ring.add_token!(token, v)
       token += step
     end
-    return(ring)
+
+    ring
   end
 
   def initialize
@@ -61,7 +61,7 @@ class MD5Ring < Ring
   def token(key)
     Digest::MD5.hexdigest(key).to_i(16)
   end
-  
+
   def add_token!(token, value)
     @ring[token] = value
   end
@@ -80,7 +80,6 @@ class MD5Ring < Ring
 
   def select_(token)
     k = @ring.keys.sort.select {|x| x < token}.last
-    return(@ring[k])
+    @ring[k]
   end
-
 end

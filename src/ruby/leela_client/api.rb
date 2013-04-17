@@ -23,6 +23,6 @@ def transport(servers)
     host, port = addr.split(":", 2)
     [Resolv.getaddress(host), (port || 6968).to_i]
   end
-  ring = MD5Ring.from_list(servers)
-  return(UDPTransport.new(ring))
+
+  UDPTransport.new MD5Ring.from_list(servers)
 end

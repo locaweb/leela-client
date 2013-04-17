@@ -20,7 +20,8 @@ def group(ring, metrics)
     node = ring.select(m.key)
     group[node] << m
   end
-  return(group)
+
+  group
 end
 
 def group_limit(ring, metrics, maxsize)

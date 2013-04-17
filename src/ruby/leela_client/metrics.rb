@@ -14,10 +14,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-def serialize_list(metrics)
-  return(metrics.map(&:serialize).join(""))
-end
-
 module Metric
   attr_reader :type
   attr_accessor :key
@@ -38,13 +34,13 @@ module Metric
     else
       value = @value.to_s
     end
-    return("#{@type} #{size}|#{@key} #{value} #{now};")
+
+    "#{@type} #{size}|#{@key} #{value} #{now};"
   end
 
   def size
-    return(self.serialize.size)
+    self.serialize.size
   end
-
 end
 
 class Gauge
@@ -68,7 +64,6 @@ class Counter
     @value     = value
     @timestamp = Time.now
   end
-
 end
 
 class Derive
@@ -80,7 +75,6 @@ class Derive
     @value     = value
     @timestamp = Time.now
   end
-
 end
 
 class Absolute
@@ -92,5 +86,4 @@ class Absolute
     @value     = value
     @timestamp = Time.now
   end
-
 end
