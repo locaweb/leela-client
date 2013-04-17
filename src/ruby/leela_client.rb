@@ -14,8 +14,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-require "leela/lb.rb"
-require "leela/api.rb"
-require "leela/ring.rb"
-require "leela/metrics.rb"
-require "leela/transport.rb"
+require "leela_client/lb.rb"
+require "leela_client/api.rb"
+require "leela_client/ring.rb"
+require "leela_client/metrics.rb"
+require "leela_client/transport.rb"
