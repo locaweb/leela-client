@@ -16,3 +16,4 @@
 
 require "minitest/spec"
 
+Dir.glob(File.dirname(__FILE__) + "/*_spec.rb") {|f| require f}
