@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/leela_client/version', __FILE__)
+require File.expand_path('../leela_client/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["PotHix", "dgvncsz0f"]
@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/locaweb/leela-client"
 
   gem.files         = Dir["./**/*"].reject {|file| file =~ /\.git|pkg/}
-  gem.require_paths = ["lib"]
+  gem.require_paths = ["leela_client"]
 
   gem.name          = "leela_client"
   gem.version       = LeelaClient::VERSION
