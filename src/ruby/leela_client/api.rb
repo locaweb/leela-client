@@ -20,6 +20,8 @@ DEFAULT_PORT = 6968
 
 module LeelaClient
   module Api
+    extend self
+
     def transport(servers)
       servers = servers.map do |addr|
         host, port = addr.split(":", 2)

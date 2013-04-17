@@ -53,7 +53,6 @@ module LeelaClient
       @value     = value
       @timestamp = Time.now
     end
-
   end
 
   class Counter

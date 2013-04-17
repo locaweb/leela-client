@@ -28,7 +28,7 @@ module LeelaClient
     end
 
     def send(metrics)
-      LoadBalander.group_limit(@ring, metrics, MAXPAYLOAD).each do |addr, mms|
+      LeelaClient::LoadBalancer.group_limit(@ring, metrics, MAXPAYLOAD).each do |addr, mms|
         mms.each do |ms|
           sent = @sock.send(serialize_list(ms), 0, addr[0], addr[1])
           raise if (sent > MAXPAYLOAD)
