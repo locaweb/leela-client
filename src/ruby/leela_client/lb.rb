@@ -18,33 +18,31 @@ module LeelaClient
   module LoadBalancer
     extend self
 
-    def group(ring, metrics)
-      group = Hash[ ring.values.map {|x| [x, []]} ]
-      metrics.each do |m|
-        node = ring.select(m.key)
-        group[node] << m
+    def group(ring, values)
+      g = Hash[ ring.values.map {|x| [x, []]} ]
+      values.each do |v|
+        node = ring.select(v.key)
+        g[node] << v
       end
-
-      group
+      return(g)
     end
 
-    def group_limit(ring, metrics, maxsize)
-      g1 = {}
-      c  = 0
-
-      group(ring, metrics).each do |k, ms|
-        g1[k] = [[]]
-        ms.each do |m|
-          c += m.size
-          g1[k][-1] << m
+    def group_limit(ring, values, maxsize)
+      g = {}
+      c = 0
+      group(ring, values).each do |k, vs|
+        tmp = [[]]
+        vs.each do |v|
+          c += v.size
           if (c >= maxsize)
-            c = 0
-            g1[k] << []
+            c = v.size
+            tmp << []
           end
+          tmp[-1] << v
         end
+        g[k] = tmp.select {|vs| vs.size > 0}
       end
-
-      g1
+      return(g)
     end
   end
 end
