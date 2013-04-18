@@ -20,5 +20,3 @@ require "leela_client/metrics"
 require "leela_client/ring"
 require "leela_client/transport"
 require "leela_client/version"
-
-module LeelaClient; end
