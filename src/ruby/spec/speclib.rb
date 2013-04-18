@@ -25,5 +25,5 @@ def randstr(size)
     size -= tmp.size
     results << tmp
   end
-  return(results.join)
+  results.join
 end
