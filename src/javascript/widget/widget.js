@@ -57,7 +57,8 @@ LEELA.widget = function (root, opts) {
                                   xaxis: options.xaxis,
                                   width: options.width || root.width(),
                                   height: options.height || root.height(),
-                                  legend: options.legend
+                                  legend: options.legend,
+                                  "x-customize-options": options["x-customize-options"]
                                 });
   };
 

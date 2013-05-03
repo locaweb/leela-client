@@ -61,6 +61,9 @@ LEELA.backend.flotr2 = function (root) {
                              container: LEELA.f.getprop(options, ["legend", "container"], null)
                            }
                  };
+    if (LEELA.f.getprop(options, ["x-customize-options"]) !== undefined) {
+      myopts = LEELA.f.getprop(options, ["x-customize-options"])(myopts);
+    }
     if (zoom !== undefined) {
       myopts.xaxis.min = zoom[0];
       myopts.yaxis.min = zoom[1];
