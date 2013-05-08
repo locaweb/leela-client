@@ -47,7 +47,7 @@ module LeelaClient
     def send(metrics)
       sent  = 0
       proto = @opts[:ssl] ? "https" : "http"
-      port  = @opts[:port] || (opts[:ssl] ? 443 : 80)
+      port  = @opts[:port] || (@opts[:ssl] ? 443 : 80)
       LeelaClient::LoadBalancer.group(@ring, metrics).each do |addr, ms|
         ms.each do |m|
           uri = URI("#{proto}://#{addr[1]}:#{port}/v1/" + ::CGI::escape(m.key))
