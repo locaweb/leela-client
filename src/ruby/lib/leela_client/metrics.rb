@@ -23,7 +23,7 @@ module LeelaClient
 
     def serialize
       size  = @key.size
-      now   = @timestamp.to_f.to_s
+      time  = @timestamp.to_f.to_s
       if (@value.integer?)
         value = @value.to_f.to_s
       elsif (@value.nan?)
@@ -36,7 +36,12 @@ module LeelaClient
         value = @value.to_s
       end
 
-      "#{@type} #{size}|#{@key} #{value} #{now};"
+      "#{@type} #{size}|#{@key} #{value} #{time};"
+    end
+
+    def serialize_json
+      time = @timestamp.to_f.to_s
+      {:name => @key, :type => @type, :value => @value, :timestamp => time}
     end
 
     def size

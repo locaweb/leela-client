@@ -24,11 +24,10 @@ module LeelaClient
 
     def transport(servers)
       servers = servers.map do |addr|
-        host, port = addr.split(":", 2)
-        [Resolv.getaddress(host), (port || 6968).to_i]
+        [Resolv.getaddress(addr), addr]
       end
 
-      UDPTransport.new MD5Ring.from_list(servers)
+      Transport.new(MD5Ring.from_list(servers))
     end
   end
 end
