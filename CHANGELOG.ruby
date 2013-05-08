@@ -1,5 +1,8 @@
 --*-- mode: text; --*--
 
+v1.0.1 | 2013-05-08
+  * bugfix: opts should be an instance variable | dgvncsz0f
+
 v1.0.0 | 2013-05-08
   * adding support for the http transport | dgvncsz0f
 
